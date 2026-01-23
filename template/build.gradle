@@ -1,0 +1,102 @@
+buildscript {
+    repositories {
+        // Зеркала для загрузки самого ForgeGradle (инструмента сборки)
+        maven { url = 'https://maven.aliyun.com/repository/public' }
+        maven { url = 'https://maven.minecraftforge.net/' }
+        mavenCentral()
+    }
+    dependencies {
+        classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '6.0.24', changing: true
+    }
+}
+
+apply plugin: 'net.minecraftforge.gradle'
+apply plugin: 'eclipse'
+apply plugin: 'idea'
+apply plugin: 'maven-publish'
+
+// Настройки мода (прописал вручную, чтобы не искало в других файлах)
+version = '1.0'
+group = 'com.flymod'
+base {
+    archivesName = 'flymod'
+}
+
+java.toolchain.languageVersion = JavaLanguageVersion.of(17)
+
+minecraft {
+    // Используем официальные маппинги Mojang для 1.20.1
+    mappings channel: 'official', version: '1.20.1'
+    copyIdeResources = true
+
+    runs {
+        configureEach {
+            workingDirectory project.file('run')
+            property 'forge.logging.markers', 'REGISTRIES'
+            property 'forge.logging.console.level', 'debug'
+            mods {
+                flymod {
+                    source sourceSets.main
+                }
+            }
+        }
+
+        client {
+            property 'forge.enabledGameTestNamespaces', 'flymod'
+        }
+
+        server {
+            property 'forge.enabledGameTestNamespaces', 'flymod'
+            args '--nogui'
+        }
+    }
+}
+
+repositories {
+    // Зеркала для загрузки библиотек самого Майнкрафта
+    maven { url = 'https://maven.aliyun.com/repository/public' }
+    maven { url = 'https://repo.spongepowered.org/repository/maven-public/' }
+    mavenCentral()
+    maven { url = 'https://maven.minecraftforge.net/' }
+}
+
+dependencies {
+    // Конкретная рабочая версия Forge для 1.20.1
+    minecraft 'net.minecraftforge:forge:1.20.1-47.2.0'
+}
+
+tasks.named('processResources', ProcessResources).configure {
+    // Упростили этот блок, чтобы он не требовал кучу переменных из gradle.properties
+    filesMatching(['META-INF/mods.toml', 'pack.mcmeta']) {
+        expand([
+                'mod_id': 'flymod',
+                'mod_name': 'Fly Mod',
+                'mod_version': '1.0',
+                'mod_authors': 'Yulia',
+                'mod_description': 'Simple Fly Command Mod',
+                'mod_license': 'MIT',
+                'minecraft_version_range': '[1.20.1,1.21)',
+                'forge_version_range': '[47,)',
+                'loader_version_range': '[47,)'
+        ])
+    }
+}
+
+tasks.named('jar', Jar).configure {
+    manifest {
+        attributes([
+                'Specification-Title'     : 'flymod',
+                'Specification-Vendor'    : 'flymod_authors',
+                'Specification-Version'   : '1',
+                'Implementation-Title'    : project.name,
+                'Implementation-Version'  : project.jar.archiveVersion,
+                'Implementation-Vendor'   : 'flymod_authors',
+                'Implementation-Timestamp': new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")
+        ])
+    }
+    finalizedBy 'reobfJar'
+}
+
+tasks.withType(JavaCompile).configureEach {
+    options.encoding = 'UTF-8'
+}
