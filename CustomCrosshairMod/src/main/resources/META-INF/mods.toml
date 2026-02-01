@@ -1,0 +1,28 @@
+modLoader="javafml"
+loaderVersion="[47,)"
+license="MIT"
+
+[[mods]]
+modId="customcrosshair"
+version="1.0.0"
+displayName="Custom Crosshair"
+description='''
+Мод для детальной кастомизации прицела в Minecraft.
+Включает в себя множество настроек и готовых пресетов.
+'''
+authors="YourName"
+displayURL="https://example.com"
+
+[[dependencies.customcrosshair]]
+    modId="forge"
+    mandatory=true
+    versionRange="[47,)"
+    ordering="NONE"
+    side="BOTH"
+
+[[dependencies.customcrosshair]]
+    modId="minecraft"
+    mandatory=true
+    versionRange="[1.20.1]"
+    ordering="NONE"
+    side="BOTH"
