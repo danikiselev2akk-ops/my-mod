@@ -1,0 +1,28 @@
+modLoader="javafml"
+loaderVersion="[47,)"
+license="MIT"
+
+[[mods]]
+modId="colorwheel"
+version="1.0.0"
+displayName="RGB Color Wheel Mod"
+description='''
+Мод добавляет RGB колесо цветов для строителей.
+Нажмите клавишу 'C' чтобы открыть колесо выбора цвета.
+Выбирайте цвет и смотрите похожие блоки Minecraft!
+'''
+authors="ColorWheelDev"
+
+[[dependencies.colorwheel]]
+modId="forge"
+mandatory=true
+versionRange="[47,)"
+ordering="NONE"
+side="BOTH"
+
+[[dependencies.colorwheel]]
+modId="minecraft"
+mandatory=true
+versionRange="[1.20.1]"
+ordering="NONE"
+side="BOTH"
